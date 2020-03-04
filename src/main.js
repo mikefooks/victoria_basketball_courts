@@ -1,7 +1,5 @@
 import * as d3 from "d3";
-import garryOakData from "./garry_oak_grid.json";
-import cherryData from "./cherry_blossom_grid.json";
-import chestnutData from "./horse_chestnut_grid.json";
+import treeGridData from "./combined_trees.json";
 import streetData from "./streets.json";
 import waterData from "./water.json";
 
@@ -63,25 +61,32 @@ const streets = svg.selectAll('path.street')
       .attr('stroke-width', 2)
       .attr('fill', 'none');
 
-const treeGrids = [ garryOakData, chestnutData, cherryData ].map(function (data) {
-    return svg.selectAll('path.' + data.name)
-        .data(data.features)
+const treeTypes = [ 'garry_oak',
+                    'horse_chestnut',
+                    'cherry_blossom' ];
+
+let counter = 0;
+
+const treeGrids = svg.selectAll('path.treeGrid')
+        .data(treeGridData.features)
         .enter()
         .append('path')
-        .attr('class', data.name)
+        .attr('class', 'treeGrid')
         .attr('d', pathGenerator)
         .attr('stroke-width', 0)
-        .attr('opacity', 0)
+        .attr('opacity', 1)
         .attr('fill', function (d) {
-            return treeColours(d.properties.NUMPOINTS);
+            return treeColours(d.properties[treeTypes[counter]]);
         });
-});
-
-const [ garryOaks, horseChestnuts, cherryBlossoms ] = treeGrids;
 
 water.on("click", function (e) {
-    horseChestnuts.transition()
-        .styleTween('opacity', function () {
-            return d3.interpolate(0, 1);
+    counter = (counter + 1) % 3;
+
+    treeGrids.transition()
+        .duration(2000)
+        .ease(d3.easeLinear)
+        .attrTween('fill', function (d) {
+            return d3.interpolate(this.getAttribute('fill'),
+                                  treeColours(d.properties[treeTypes[counter]]));
         });
 });
