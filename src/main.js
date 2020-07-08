@@ -1,92 +1,112 @@
-import * as d3 from "d3";
-import treeGridData from "./combined_trees.json";
-import streetData from "./streets.json";
-import waterData from "./water.json";
+import * as d3_geo from "d3-geo";
+import * as d3_selection from "d3-selection";
+import * as topojson from "topojson-client";
 
-function treeColours (val) {
-    if (0.000000000000000 <= val && val < 0.990000000000000) {
-        return "rgba(255,255,255,0)";
-    }
-    if (0.990000000000000 <= val && val < 1.990000000000000) {
-        return "rgba(133,230,67,255)";
-    }
-    if (1.990000000000000 <= val && val < 5.990000000000000) {
-        return "rgba(83,191,14,255)";
-    }
-    if (5.990000000000000 <= val && val < 114.285714285714292) {
-        return "rgba(62,165,11,255)";
-    }
-    if (114.285714285714292 <= val && val < 142.857142857142861) {
-        return "rgba(41,139,9,255)";
-    }
-    if (142.857142857142861 <= val && val < 171.428571428571445) {
-        return "rgba(20,113,6,255)";
-    }
-    if (171.428571428571445 <= val && val < 200.000000000000000) {
-        return "rgba(55,104,0,255)";
-    }
+import basemapData from "./basemap_ball.json";
+import { store } from "./state.js";
+
+
+function _toArray (nodeLst) {
+    return Array.prototype.slice.call(nodeLst, 0);
+}
+
+function _contains (lst, val) {
+    return lst.findIndex(x => x == val) >= 0;
+}
+
+function _unique (lst) {
+    return lst.filter(function (val, idx, self) {
+        return self.indexOf(val) == idx;
+    });
 }
 
 const windowHeight = window.innerHeight;
 const windowWidth = window.innerWidth;
 
-const svg = d3.select("#trees-viz")
+const streetData = topojson.feature(basemapData, "streets");
+const waterData = topojson.feature(basemapData, "water");
+const ballData = topojson.feature(basemapData, "bball");
+
+
+const viz = d3_selection.select("#viz")
       .append("svg")
       .attr("height", windowHeight)
-      .attr("width", windowWidth);
+      .attr("width", "100%");
 
-const projection = d3.geoMercator()
-      .fitExtent([[0, 0], [windowWidth, windowHeight]], streetData);
+const projection = d3_geo.geoMercator()
+      .fitExtent([[0, 0], [windowWidth * .75, windowHeight]], streetData);
 
-const pathGenerator = d3.geoPath()
+const pathGenerator = d3_geo.geoPath()
       .projection(projection);
 
-const water = svg.selectAll('path.water')
+const water = viz.selectAll('path.water')
       .data(waterData.features)
       .enter()
       .append('path')
       .attr('class', 'water')
       .attr('d', pathGenerator)
-      .attr('stroke', 'black')
-      .attr('stroke-width', 1)
-      .attr('fill', '#0011ee');
+      .attr('stroke-width', 0)
+      .attr('fill', '#8497bd');
 
-const streets = svg.selectAll('path.street')
+const streets = viz.selectAll('path.street')
       .data(streetData.features)
       .enter()
       .append('path')
       .attr('class', 'street')
       .attr('d', pathGenerator)
-      .attr('stroke', 'black')
-      .attr('stroke-width', 2)
+      .attr('stroke-width', function (d) {
+          return d.properties.Width * .1;
+      })
       .attr('fill', 'none');
 
-const treeTypes = [ 'garry_oak',
-                    'horse_chestnut',
-                    'cherry_blossom' ];
+const ballCourts = viz.selectAll('circle.bball_court')
+      .data(ballData.features)
+      .enter()
+      .append('circle')
+      .attr('class', 'bball_court')
+      .attr('r', '8px')
+      .attr('fill', 'red')
+      .attr('cx', function (d) {
+          return projection(d.geometry.coordinates)[0];
+      })
+      .attr('cy', function (d) {
+          return projection(d.geometry.coordinates)[1];
+      });
 
-let counter = 0;
+function updateStreetClasses () {
+    let classes = store.getState().get("showClasses");
+    streets.attr("stroke", function (d) {
+        if (_contains(classes, d.properties.Class)) {
+            return "#eee";
+        } else {
+            return "#111";
+        }
+    });
+}
 
-const treeGrids = svg.selectAll('path.treeGrid')
-        .data(treeGridData.features)
-        .enter()
-        .append('path')
-        .attr('class', 'treeGrid')
-        .attr('d', pathGenerator)
-        .attr('stroke-width', 0)
-        .attr('opacity', 1)
-        .attr('fill', function (d) {
-            return treeColours(d.properties[treeTypes[counter]]);
-        });
+updateStreetClasses();
 
-water.on("click", function (e) {
-    counter = (counter + 1) % 3;
+const controls = d3_selection.select("#street-types");
+const streetNames = d3_selection.select("#street-names");
 
-    treeGrids.transition()
-        .duration(2000)
-        .ease(d3.easeLinear)
-        .attrTween('fill', function (d) {
-            return d3.interpolate(this.getAttribute('fill'),
-                                  treeColours(d.properties[treeTypes[counter]]));
-        });
-});
+const classButtons = controls.selectAll("div.street-type-button")
+      .data([
+          "Local",
+          "Downtown Core",
+          "Arterial",
+          "Secondary Arterial",
+          "Collector",
+          "Secondary Collector"
+      ])
+      .enter()
+      .append("div")
+      .attr("class", "street-type-button")
+      .classed("activated", function (d) {
+          let shownClasses = store.getState().get("showClasses");
+          if (_contains(shownClasses, d)) {
+              return true;
+          } else {
+              return false;
+          }
+      })
+      .text(function (d) { return d; });

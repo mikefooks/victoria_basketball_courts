@@ -18,6 +18,9 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "d3": "^5.15.0"
+    "d3": "^5.15.0",
+    "immutable": "^4.0.0-rc.12",
+    "redux": "^4.0.5",
+    "topojson-client": "^3.1.0"
   }
 }

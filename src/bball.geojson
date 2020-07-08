@@ -1,0 +1,29 @@
+{
+"type": "FeatureCollection",
+"name": "bball",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "type": "school", "name": "Ecole Beausoleil", "intersect": "Oak Bay Ave,Bank St" }, "geometry": { "type": "Point", "coordinates": [ -123.328427209382284, 48.427717253943612 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "Margaret Jenkins Elementary", "intersect": "Chandler Ave,Foul Bay Rd" }, "geometry": { "type": "Point", "coordinates": [ -123.329095930071205, 48.416295524168063 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "Margaret Jenkins Elementary", "intersect": "Fairfield Rd,Richmond Ave" }, "geometry": { "type": "Point", "coordinates": [ -123.330087557757693, 48.415918659877519 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Hollywood Park", "intersect": "Fairfield Rd,Beechwood Ave" }, "geometry": { "type": "Point", "coordinates": [ -123.334793210055011, 48.413494826418521 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "Sir James Douglas Elementary", "intersect": "Moss St,Thurlow Rd" }, "geometry": { "type": "Point", "coordinates": [ -123.348265757869683, 48.415990121434504 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Beacon Hill Park", "intersect": "Quadra St,Southgate St" }, "geometry": { "type": "Point", "coordinates": [ -123.362514150257084, 48.41520158421735 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Michigan Street Playground", "intersect": "Douglas St,Michigan St" }, "geometry": { "type": "Point", "coordinates": [ -123.366259281115006, 48.416646484794384 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "James Bay Elementary", "intersect": "Niagara St,Oswego St" }, "geometry": { "type": "Point", "coordinates": [ -123.380274498708076, 48.41634093202704 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "Central Middle School", "intersect": "Camosun St,Yates St" }, "geometry": { "type": "Point", "coordinates": [ -123.34721755810979, 48.424308092385004 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "Victoria High Shool", "intersect": "Vining St,Fernwood Rd" }, "geometry": { "type": "Point", "coordinates": [ -123.345714167730378, 48.429847357920259 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "George Jay Elementary", "intersect": "Chambers St,Queens Ave" }, "geometry": { "type": "Point", "coordinates": [ -123.350756881666754, 48.433190741055974 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Central Park", "intersect": "Pembroke St,Quadra St" }, "geometry": { "type": "Point", "coordinates": [ -123.358072725923151, 48.432668706015676 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "Oaklands Elementary", "intersect": "Ryan St,Belmont Ave" }, "geometry": { "type": "Point", "coordinates": [ -123.338583861967393, 48.44059267098767 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "Quadra Elementary", "intersect": "Finlayson St,Quadra St" }, "geometry": { "type": "Point", "coordinates": [ -123.359928253644995, 48.445704258887986 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Cecelia Ravine Park", "intersect": "Burnside Rd East,Napier Lane" }, "geometry": { "type": "Point", "coordinates": [ -123.378090691777047, 48.445025040457544 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Oaklands Park", "intersect": "Kings Rd,Shakespeare St" }, "geometry": { "type": "Point", "coordinates": [ -123.336128534840157, 48.437769499526134 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "William Stevenson Park", "intersect": "Gladstone Ave,Chambers St" }, "geometry": { "type": "Point", "coordinates": [ -123.34820554638506, 48.430871503302896 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Vic West Park", "intersect": "Esquimalt Rd,Catherine St" }, "geometry": { "type": "Point", "coordinates": [ -123.381490692525318, 48.430839370814233 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "Victoria West Elementary", "intersect": "Wilson Rd,William St" }, "geometry": { "type": "Point", "coordinates": [ -123.389350522686712, 48.433946112356878 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Banfield Park", "intersect": "Craigflower Rd,Styles St" }, "geometry": { "type": "Point", "coordinates": [ -123.389209998903539, 48.438005105482652 ] } },
+{ "type": "Feature", "properties": { "type": "school", "name": "SJ Burnside Centre", "intersect": "Jutland Rd,Burnside Rd East" }, "geometry": { "type": "Point", "coordinates": [ -123.374934817585938, 48.443840909807349 ] } },
+{ "type": "Feature", "properties": { "type": "park", "name": "Oswald Park", "intersect": "Cedar Hill Rd,Gosworth Rd" }, "geometry": { "type": "Point", "coordinates": [ -123.344641122471927, 48.445588392787187 ] } }
+]
+}

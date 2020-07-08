@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #111;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.activated {
+    stroke: orange;
+}
+
+#container {
+    display: block;
+}
+
+#viz {
+    width: 75%;
+}
+
+.street-type-button {
+    display: inline-block;
+    outline: 1px solid white;
+    color: #eee;
+    margin: .5em;
+    padding: .5em;
+}
+
+.street-type-button.activated {
+    background-color: #333;
+}
+
+#street-search {
+    width: 100%;
+}
+
+#controls {
+    width: 25%;
+    float: right;
+}
+
+

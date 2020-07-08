@@ -7,7 +7,10 @@ module.exports = {
         filename: "main.js",
         path: path.resolve(__dirname, "public")
     },
-    devtool: "inline-source-map",
+    optimization: {
+        minimize: true
+    },
+    // devtool: "inline-source-map",
     module: {
         rules: [
             {
