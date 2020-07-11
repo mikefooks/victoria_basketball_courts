@@ -2,7 +2,7 @@ import * as d3_geo from "d3-geo";
 import * as d3_selection from "d3-selection";
 import * as topojson from "topojson-client";
 
-import basemapData from "./basemap_ball.json";
+import basemapData from "./basemap.json";
 import { store } from "./state.js";
 
 
@@ -26,7 +26,6 @@ const windowWidth = window.innerWidth;
 const streetData = topojson.feature(basemapData, "streets");
 const waterData = topojson.feature(basemapData, "water");
 const ballData = topojson.feature(basemapData, "bball");
-
 
 const viz = d3_selection.select("#viz")
       .append("svg")
@@ -73,23 +72,9 @@ const ballCourts = viz.selectAll('circle.bball_court')
           return projection(d.geometry.coordinates)[1];
       });
 
-function updateStreetClasses () {
-    let classes = store.getState().get("showClasses");
-    streets.attr("stroke", function (d) {
-        if (_contains(classes, d.properties.Class)) {
-            return "#eee";
-        } else {
-            return "#111";
-        }
-    });
-}
-
-updateStreetClasses();
-
-const controls = d3_selection.select("#street-types");
-const streetNames = d3_selection.select("#street-names");
-
-const classButtons = controls.selectAll("div.street-type-button")
+const controls = d3_selection.select("#street-classes");
+const streetNameDisplay = d3_selection.select("#streetname-display");
+const classButtons = controls.selectAll("div.street-class-button")
       .data([
           "Local",
           "Downtown Core",
@@ -100,13 +85,43 @@ const classButtons = controls.selectAll("div.street-type-button")
       ])
       .enter()
       .append("div")
-      .attr("class", "street-type-button")
-      .classed("activated", function (d) {
+      .attr("class", "street-class-button")
+      .classed("shown", function (d) {
           let shownClasses = store.getState().get("showClasses");
-          if (_contains(shownClasses, d)) {
-              return true;
-          } else {
-              return false;
-          }
+          return _contains(shownClasses, d) ? true : false;
       })
       .text(function (d) { return d; });
+
+/**
+   FEEDBACK
+*/
+
+function updateStreetClasses () {
+    let classes = store.getState().get("showClasses");
+    streets.classed("shown", function (d) {
+        return _contains(classes, d.properties.Class) ? true : false;
+    });
+}
+
+function highlightStreet (streetName) {
+    streets.classed("highlighted", function (d) {
+        return streetName == d.properties.StreetName ? true : false;
+    });
+}
+
+function updateStreetNameDisplay (streetName) {
+    streetNameDisplay.text(streetName);
+}
+
+/** STATE CHANGES */
+
+/** EVENT BINDINGS */
+
+streets.on("mouseover", function (d) {
+    updateStreetNameDisplay(d.properties.StreetName);
+    highlightStreet(d.properties.StreetName);
+});
+
+/** INITIALIZATION */
+
+updateStreetClasses();
