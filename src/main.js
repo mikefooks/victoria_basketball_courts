@@ -73,6 +73,8 @@ const ballCourts = viz.selectAll('circle.bball_court')
       });
 
 const controls = d3_selection.select("#street-classes");
+const courtImage = d3_selection.select("#court-image");
+const courtName = d3_selection.select("#court-name");
 const streetNameDisplay = d3_selection.select("#streetname-display");
 const classButtons = controls.selectAll("div.street-class-button")
       .data([
@@ -132,7 +134,29 @@ classButtons.on("click", function (d) {
 });
 
 ballCourts.on("mouseover", function (d) {
-    d3_selection.select(this).attr("r", "8px");
+    d3_selection.select(this)
+        .attr("fill", "green")
+        .attr("r", "8px");
+
+    streets.classed("highlighted", false);
+    streetNameDisplay.empty();
+});
+
+ballCourts.on("click", function (d) {
+    const imgSrc = "https://mikefooks.com/basketball/" +
+          d.properties.image_link;
+
+    courtImage.select("img")
+        .remove();
+
+    courtImage.append("img")
+        .attr("src", imgSrc);
+});
+
+ballCourts.on("mouseout", function (d) {
+    d3_selection.select(this)
+        .attr("fill", "red")
+        .attr("r", "6px");
 });
 
 /** INITIALIZATION */

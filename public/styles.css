@@ -25,6 +25,10 @@ body {
     width: 60%;
 }
 
+div#court-image>img {
+    width: 100%;
+}
+
 .street {
     stroke-opacity: 0.0;
     stroke: #eee;
