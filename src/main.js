@@ -3,7 +3,7 @@ import * as d3_selection from "d3-selection";
 import * as topojson from "topojson-client";
 
 import basemapData from "./basemap.json";
-import { store } from "./state.js";
+import { store, toggleClass } from "./state.js";
 
 
 function _toArray (nodeLst) {
@@ -33,7 +33,7 @@ const viz = d3_selection.select("#viz")
       .attr("width", "100%");
 
 const projection = d3_geo.geoMercator()
-      .fitExtent([[0, 0], [windowWidth * .75, windowHeight]], streetData);
+      .fitExtent([[0, 0], [windowWidth * .60, windowHeight]], streetData);
 
 const pathGenerator = d3_geo.geoPath()
       .projection(projection);
@@ -54,7 +54,7 @@ const streets = viz.selectAll('path.street')
       .attr('class', 'street')
       .attr('d', pathGenerator)
       .attr('stroke-width', function (d) {
-          return d.properties.Width * .1;
+          return d.properties.Width * .15;
       })
       .attr('fill', 'none');
 
@@ -63,7 +63,7 @@ const ballCourts = viz.selectAll('circle.bball_court')
       .enter()
       .append('circle')
       .attr('class', 'bball_court')
-      .attr('r', '8px')
+      .attr('r', '6px')
       .attr('fill', 'red')
       .attr('cx', function (d) {
           return projection(d.geometry.coordinates)[0];
@@ -101,6 +101,9 @@ function updateStreetClasses () {
     streets.classed("shown", function (d) {
         return _contains(classes, d.properties.Class) ? true : false;
     });
+    classButtons.classed("shown", function (d) {
+        return _contains(classes, d) ? true : false;
+    });
 }
 
 function highlightStreet (streetName) {
@@ -120,6 +123,16 @@ function updateStreetNameDisplay (streetName) {
 streets.on("mouseover", function (d) {
     updateStreetNameDisplay(d.properties.StreetName);
     highlightStreet(d.properties.StreetName);
+});
+
+classButtons.on("click", function (d) {
+    store.dispatch(toggleClass(d));
+    console.log(store.getState());
+    updateStreetClasses();
+});
+
+ballCourts.on("mouseover", function (d) {
+    d3_selection.select(this).attr("r", "8px");
 });
 
 /** INITIALIZATION */

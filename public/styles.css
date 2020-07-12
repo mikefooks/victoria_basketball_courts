@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #111;
+    background-color: #333;
 }
 
 .inline {
@@ -22,7 +22,7 @@ body {
 
 #viz {
     position: relative;
-    width: 75%;
+    width: 60%;
 }
 
 .street {
@@ -42,13 +42,14 @@ body {
 .street-class-button {
     display: inline-block;
     outline: 1px solid white;
+    cursor: pointer;
     color: #eee;
     margin: .5em;
     padding: .5em;
 }
 
 .street-class-button.shown {
-    background-color: #333;
+    background-color: #444;
 }
 
 #streetname-display {
@@ -59,6 +60,6 @@ body {
 }
 
 #controls {
-    width: 25%;
+    width: 40%;
     float: right;
 }

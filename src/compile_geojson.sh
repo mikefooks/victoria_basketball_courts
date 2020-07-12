@@ -4,8 +4,8 @@ TMPFILE=`mktemp`;
 SIMPLIFY_AMT=$1;
 
 geo2topo streets=streets.geojson \
-         water=water.geojson \
-         bball=bball.geojson > $TMPFILE
+       	 water=water.geojson \
+       	 bball=bball.geojson > $TMPFILE
 
 toposimplify -F -P $SIMPLIFY_AMT $TMPFILE > basemap.json
 

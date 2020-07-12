@@ -36,13 +36,13 @@ function toggleStreet (streetName, activate) {
 
 function _toggleClassReducer (state, action) {
     let clickedClass = action.payload.className;
-    if (state.get("showClasses").indexOf("clickedClass") < 0) {
+    if (state.get("showClasses").indexOf(clickedClass) < 0) {
         return state.update("showClasses", function (col) {
-            return col.push(action.className);
+            return col.push(clickedClass);
         });
     } else {
         return state.update("showClasses", function (col) {
-            let classIdx = col.indexOf(action.className);
+            let classIdx = col.indexOf(clickedClass);
             return col.delete(classIdx);
         });
     }
