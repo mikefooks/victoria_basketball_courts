@@ -21,8 +21,18 @@ body {
     width: 60%;
 }
 
-div#court-image>img {
+#court-info {
+    margin: 1em;
+    position: absolute;
+    bottom: 0%;
+}
+
+.court-image>img {
     width: 100%;
+}
+
+.intersect-street {
+    display: inline;
 }
 
 .street {

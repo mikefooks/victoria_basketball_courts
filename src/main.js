@@ -1,5 +1,5 @@
 import * as d3_geo from "d3-geo";
-import * as d3_selection from "d3-selection";
+import { select, selectAll } from "d3-selection";
 import * as topojson from "topojson-client";
 
 import basemapData from "./basemap.json";
@@ -27,7 +27,7 @@ const streetData = topojson.feature(basemapData, "streets");
 const waterData = topojson.feature(basemapData, "water");
 const ballData = topojson.feature(basemapData, "bball");
 
-const viz = d3_selection.select("#viz")
+const viz = select("#viz")
       .append("svg")
       .attr("height", windowHeight)
       .attr("width", "100%");
@@ -70,9 +70,10 @@ const ballCourts = viz.selectAll('circle.bball_court')
           return projection(d.geometry.coordinates)[1];
       });
 
-const controls = d3_selection.select("#street-classes");
-const courtInfoDisplay  = d3_selection.select("#court-info");
-const streetNameDisplay = d3_selection.select("#streetname-display");
+const controls = select("#street-classes");
+const courtInfoDisplay  = select("#court-info");
+const streetNameDisplay = select("#streetname-display");
+
 const classButtons = controls.selectAll("div.street-class-button")
       .data([
           "Local",
@@ -114,18 +115,32 @@ function updateStreetNameDisplay (streetName) {
 }
 
 function updateCourtInfoDisplay (info) {
+    const imgSrc = "https://mikefooks.com/basketball/" +
+          info.image_link;
+
+    const intersectStreets = info.intersect.split(",");
+
     courtInfoDisplay.selectAll("div")
         .remove();
 
     courtInfoDisplay.append("div")
-        .classed("court-info", true)
+        .classed("court-name", true)
         .append("h1")
         .text(info.name);
 
     courtInfoDisplay.append("div")
         .classed("court-image", true)
         .append("img")
-        .attr("src", info.image_link)
+        .attr("src", imgSrc);
+
+    courtInfoDisplay.append("div")
+        .classed("intersect-streets", true)
+        .selectAll("h2.intersect-street")
+        .data(intersectStreets)
+        .enter()
+        .append("h2")
+        .classed("intersect-street", true)
+        .text(function (d) { return d; });
 }
 
 /** STATE CHANGES */
@@ -144,24 +159,19 @@ classButtons.on("click", function (d) {
 });
 
 ballCourts.on("mouseover", function (d) {
-    d3_selection.select(this)
-        .classed("highlighted", true);
-
+    select(this).classed("highlighted", true);
     streets.classed("highlighted", false);
     streetNameDisplay.empty();
 });
 
-ballCourts.on("click", function (d) {
-    const imgSrc = "https://mikefooks.com/basketball/" +
-          d.properties.image_link;
+ballCourts.on("mouseout", function (d) {
+    select(this).classed("highlighted", false);
+});
 
+ballCourts.on("click", function (d) {
     updateCourtInfoDisplay(d.properties);
 });
 
-ballCourts.on("mouseout", function (d) {
-    d3_selection.select(this)
-        .classed("highlighted", false);
-});
 
 /** INITIALIZATION */
 
