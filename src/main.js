@@ -62,9 +62,7 @@ const ballCourts = viz.selectAll('circle.bball_court')
       .data(ballData.features)
       .enter()
       .append('circle')
-      .attr('class', 'bball_court')
-      .attr('r', '6px')
-      .attr('fill', 'red')
+      .attr('class', 'ball_court')
       .attr('cx', function (d) {
           return projection(d.geometry.coordinates)[0];
       })
@@ -73,8 +71,7 @@ const ballCourts = viz.selectAll('circle.bball_court')
       });
 
 const controls = d3_selection.select("#street-classes");
-const courtImage = d3_selection.select("#court-image");
-const courtName = d3_selection.select("#court-name");
+const courtInfoDisplay  = d3_selection.select("#court-info");
 const streetNameDisplay = d3_selection.select("#streetname-display");
 const classButtons = controls.selectAll("div.street-class-button")
       .data([
@@ -94,9 +91,7 @@ const classButtons = controls.selectAll("div.street-class-button")
       })
       .text(function (d) { return d; });
 
-/**
-   FEEDBACK
-*/
+/** FEEDBACK */
 
 function updateStreetClasses () {
     let classes = store.getState().get("showClasses");
@@ -118,6 +113,21 @@ function updateStreetNameDisplay (streetName) {
     streetNameDisplay.text(streetName);
 }
 
+function updateCourtInfoDisplay (info) {
+    courtInfoDisplay.selectAll("div")
+        .remove();
+
+    courtInfoDisplay.append("div")
+        .classed("court-info", true)
+        .append("h1")
+        .text(info.name);
+
+    courtInfoDisplay.append("div")
+        .classed("court-image", true)
+        .append("img")
+        .attr("src", info.image_link)
+}
+
 /** STATE CHANGES */
 
 /** EVENT BINDINGS */
@@ -135,8 +145,7 @@ classButtons.on("click", function (d) {
 
 ballCourts.on("mouseover", function (d) {
     d3_selection.select(this)
-        .attr("fill", "green")
-        .attr("r", "8px");
+        .classed("highlighted", true);
 
     streets.classed("highlighted", false);
     streetNameDisplay.empty();
@@ -146,17 +155,12 @@ ballCourts.on("click", function (d) {
     const imgSrc = "https://mikefooks.com/basketball/" +
           d.properties.image_link;
 
-    courtImage.select("img")
-        .remove();
-
-    courtImage.append("img")
-        .attr("src", imgSrc);
+    updateCourtInfoDisplay(d.properties);
 });
 
 ballCourts.on("mouseout", function (d) {
     d3_selection.select(this)
-        .attr("fill", "red")
-        .attr("r", "6px");
+        .classed("highlighted", false);
 });
 
 /** INITIALIZATION */
