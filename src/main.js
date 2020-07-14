@@ -29,7 +29,7 @@ const ballData = topojson.feature(basemapData, "bball");
 
 const viz = select("#viz")
       .append("svg")
-      .attr("height", windowHeight)
+      .attr("height", windowHeight - 16)
       .attr("width", "100%");
 
 const projection = d3_geo.geoMercator()
@@ -104,9 +104,10 @@ function updateStreetClasses () {
     });
 }
 
-function highlightStreet (streetName) {
+function highlightStreet (streetNames) {
     streets.classed("highlighted", function (d) {
-        return streetName == d.properties.StreetName ? true : false;
+        const streetIdx = streetNames.indexOf(d.properties.StreetName);
+        return streetIdx >= 0 ? true : false;
     });
 }
 
@@ -129,32 +130,32 @@ function updateCourtInfoDisplay (info) {
         .text(info.name);
 
     courtInfoDisplay.append("div")
+        .classed("intersect-streets", true)
+        .on("mouseover", function () {
+            highlightStreet(intersectStreets);
+        })
+        .append("h2")
+        .text(function (d) {
+            return intersectStreets[0]
+                + " @ "
+                + intersectStreets[1];
+        });
+
+    courtInfoDisplay.append("div")
         .classed("court-image", true)
         .append("img")
         .attr("src", imgSrc);
-
-    courtInfoDisplay.append("div")
-        .classed("intersect-streets", true)
-        .selectAll("h2.intersect-street")
-        .data(intersectStreets)
-        .enter()
-        .append("h2")
-        .classed("intersect-street", true)
-        .text(function (d) { return d; });
 }
-
-/** STATE CHANGES */
 
 /** EVENT BINDINGS */
 
 streets.on("mouseover", function (d) {
     updateStreetNameDisplay(d.properties.StreetName);
-    highlightStreet(d.properties.StreetName);
+    highlightStreet([d.properties.StreetName]);
 });
 
 classButtons.on("click", function (d) {
     store.dispatch(toggleClass(d));
-    console.log(store.getState());
     updateStreetClasses();
 });
 
