@@ -13,7 +13,7 @@ body {
 h1, h2 {
     margin: 0 8px;
     font-weight: normal;
-    line-height: 24px;
+    line-height: 30px;
 }
 
 #container {
@@ -34,6 +34,7 @@ h1, h2 {
 
 .court-image>img {
     width: 100%;
+    display: block;
 }
 
 .intersect-street {
@@ -85,7 +86,13 @@ circle.ball_court {
     fill: red;
 }
 
-circle.ball_court.highlighted {
+circle.ball_court.active {
+    r: 8px;
+    fill: green;
+    
+}
+
+circle.ball_court:hover {
     r: 8px;
     fill: green;
 }

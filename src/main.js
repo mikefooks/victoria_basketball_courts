@@ -29,7 +29,7 @@ const ballData = topojson.feature(basemapData, "bball");
 
 const viz = select("#viz")
       .append("svg")
-      .attr("height", windowHeight - 16)
+      .attr("height", windowHeight)
       .attr("width", "100%");
 
 const projection = d3_geo.geoMercator()
@@ -118,33 +118,31 @@ function updateStreetNameDisplay (streetName) {
 function updateCourtInfoDisplay (info) {
     const imgSrc = "https://mikefooks.com/basketball/" +
           info.image_link;
-
     const intersectStreets = info.intersect.split(",");
+
+    const tmpl = `<div class='court-name'>
+                      <h1>${ info.name }</h1></td>
+                  </div>
+                  <div class='intersect-streets'>
+                      <h2>${ intersectStreets.join(" @ ") }</h2>
+                  </div>
+                  <div class='court-notes'>
+                      <p>${ info.notes }</p>
+                  </div>
+                  <div class='court-image'>
+                      <img src=${ imgSrc }>
+                  </div>`;
 
     courtInfoDisplay.selectAll("div")
         .remove();
 
-    courtInfoDisplay.append("div")
-        .classed("court-name", true)
-        .append("h1")
-        .text(info.name);
+    courtInfoDisplay.html(tmpl);
 
-    courtInfoDisplay.append("div")
-        .classed("intersect-streets", true)
-        .on("mouseover", function () {
-            highlightStreet(intersectStreets);
-        })
-        .append("h2")
-        .text(function (d) {
-            return intersectStreets[0]
-                + " @ "
-                + intersectStreets[1];
-        });
-
-    courtInfoDisplay.append("div")
-        .classed("court-image", true)
-        .append("img")
-        .attr("src", imgSrc);
+    courtInfoDisplay.select("div.intersect-streets")
+       .on("mouseover", function () {
+           highlightStreet(intersectStreets);
+           updateStreetNameDisplay(intersectStreets.join(" @ "));
+       });
 }
 
 /** EVENT BINDINGS */
@@ -160,19 +158,15 @@ classButtons.on("click", function (d) {
 });
 
 ballCourts.on("mouseover", function (d) {
-    select(this).classed("highlighted", true);
     streets.classed("highlighted", false);
     streetNameDisplay.empty();
 });
 
-ballCourts.on("mouseout", function (d) {
-    select(this).classed("highlighted", false);
-});
-
 ballCourts.on("click", function (d) {
+    ballCourts.classed("active", false);
+    select(this).classed("active", true);
     updateCourtInfoDisplay(d.properties);
 });
-
 
 /** INITIALIZATION */
 
