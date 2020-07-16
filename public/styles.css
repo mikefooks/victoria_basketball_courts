@@ -10,7 +10,7 @@ body {
     color: #eee;
 }
 
-h1, h2 {
+h1, h2, h3 {
     margin: 0 8px;
     font-weight: normal;
     line-height: 30px;
@@ -27,8 +27,7 @@ h1, h2 {
 }
 
 #court-info {
-    position: absolute;
-    bottom: 0%;
+    margin-top: 16px;
     text-align: right;
 }
 
@@ -37,8 +36,14 @@ h1, h2 {
     display: block;
 }
 
-.intersect-street {
+.court-notes>p {
+    margin: 8px;
+}
+
+.intersect-streets {
     display: inline;
+    cursor: pointer;
+    text-decoration: underline dotted #eee;
 }
 
 .street {
@@ -55,12 +60,16 @@ h1, h2 {
     stroke: red;
 }
 
+#street-classes {
+    text-align: right;
+}
+
 .street-class-button {
     display: inline-block;
-    outline: 1px solid white;
+    outline: 0.5px solid #eee;
     cursor: pointer;
     color: #eee;
-    margin: .5em;
+    margin: .25em;
     padding: .5em;
 }
 
@@ -71,14 +80,25 @@ h1, h2 {
 #streetname-display {
     position: absolute;
     font-size: 2em;
-    right: .5em;
-    bottom: .5em;
+    left: 4px;
+    bottom: 4px;
 }
 
 #controls {
     width: 40%;
     float: right;
     display: inline-block;
+}
+
+#controls>h1 {
+    font-size: 40px;
+    margin-top: 16px;
+    text-align: right;
+}
+
+#controls>div {
+    position: absolute;
+    bottom: 0%;
 }
 
 circle.ball_court {
