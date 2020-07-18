@@ -5,6 +5,7 @@ SIMPLIFY_AMT=$1;
 
 geo2topo streets=streets.geojson \
        	 water=water.geojson \
+	 parks=parks.geojson \
        	 bball=bball.geojson > $TMPFILE
 
 toposimplify -F -P $SIMPLIFY_AMT $TMPFILE > basemap.json

@@ -18,6 +18,7 @@ container.style.height = windowHeight + "px";
 
 const streetData = topojson.feature(basemapData, "streets");
 const waterData = topojson.feature(basemapData, "water");
+const parksData = topojson.feature(basemapData, "parks");
 const ballData = topojson.feature(basemapData, "bball");
 
 const viz = select("#viz")
@@ -32,35 +33,51 @@ const projection = geoMercator()
 const pathGenerator = geoPath()
       .projection(projection);
 
-const water = viz.selectAll('path.water')
-      .data(waterData.features)
+const parks = viz.selectAll("path.park")
+      .data(parksData.features)
       .enter()
-      .append('path')
-      .attr('class', 'water')
-      .attr('d', pathGenerator)
-      .attr('stroke-width', 0)
-      .attr('fill', '#8497bd');
+      .append("path")
+      .attr("class", "park")
+      .attr("d", pathGenerator)
+      .attr("stroke-width", 0)
+      .attr("fill", function (d) {
+          if (d.properties.ParkClassC == "BE") {
+              return "#bdad84";
+          } else {
+              return "#84bd84";
+          }
+      });
 
-const streets = viz.selectAll('path.street')
+const streets = viz.selectAll("path.street")
       .data(streetData.features)
       .enter()
-      .append('path')
-      .attr('class', 'street')
-      .attr('d', pathGenerator)
-      .attr('stroke-width', function (d) {
+      .append("path")
+      .attr("class", "street")
+      .attr("d", pathGenerator)
+      .attr("stroke-width", function (d) {
           return d.properties.Width * .15;
       })
-      .attr('fill', 'none');
+      .attr("fill", "none");
 
-const ballCourts = viz.selectAll('circle.bball_court')
+const water = viz.selectAll("path.water")
+      .data(waterData.features)
+      .enter()
+      .append("path")
+      .attr("class", "water")
+      .attr("d", pathGenerator)
+      .attr("stroke-width", 1)
+      .attr("stroke", "#333")
+      .attr("fill", "#8497bd");
+
+const ballCourts = viz.selectAll("circle.bball_court")
       .data(ballData.features)
       .enter()
-      .append('circle')
-      .attr('class', 'ball_court')
-      .attr('cx', function (d) {
+      .append("circle")
+      .attr("class", "ball_court")
+      .attr("cx", function (d) {
           return projection(d.geometry.coordinates)[0];
       })
-      .attr('cy', function (d) {
+      .attr("cy", function (d) {
           return projection(d.geometry.coordinates)[1];
       });
 
