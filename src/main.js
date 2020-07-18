@@ -1,4 +1,4 @@
-import * as d3_geo from "d3-geo";
+import { geoMercator, geoPath } from "d3-geo";
 import { select, selectAll } from "d3-selection";
 import * as topojson from "topojson-client";
 
@@ -6,22 +6,15 @@ import basemapData from "./basemap.json";
 import { store, toggleClass } from "./state.js";
 
 
-function _toArray (nodeLst) {
-    return Array.prototype.slice.call(nodeLst, 0);
-}
-
 function _contains (lst, val) {
     return lst.findIndex(x => x == val) >= 0;
 }
 
-function _unique (lst) {
-    return lst.filter(function (val, idx, self) {
-        return self.indexOf(val) == idx;
-    });
-}
-
 const windowHeight = window.innerHeight;
 const windowWidth = window.innerWidth;
+
+const container = document.querySelector("#container");
+container.style.height = windowHeight + "px";
 
 const streetData = topojson.feature(basemapData, "streets");
 const waterData = topojson.feature(basemapData, "water");
@@ -29,13 +22,14 @@ const ballData = topojson.feature(basemapData, "bball");
 
 const viz = select("#viz")
       .append("svg")
-      .attr("height", windowHeight)
+      .attr("height", "100%")
       .attr("width", "100%");
 
-const projection = d3_geo.geoMercator()
-      .fitExtent([[0, 0], [windowWidth * .60, windowHeight]], streetData);
+const projection = geoMercator()
+      .fitExtent([[0, 0], [windowWidth * .60, windowHeight]],
+                 streetData);
 
-const pathGenerator = d3_geo.geoPath()
+const pathGenerator = geoPath()
       .projection(projection);
 
 const water = viz.selectAll('path.water')
@@ -121,10 +115,10 @@ function updateCourtInfoDisplay (info) {
     const intersectStreets = info.intersect.split(",");
 
     const tmpl = `<div class='court-name'>
-                      <h1>${ info.name }</h1></td>
+                      <h2>${ info.name }</h1></td>
                   </div>
                   <div class='intersect-streets'>
-                      <h2>${ intersectStreets.join(" @ ") }</h2>
+                      <h3>${ intersectStreets.join(" @ ") }</h2>
                   </div>
                   <div class='court-notes'>
                       <p>${ info.notes }</p>
@@ -171,3 +165,4 @@ ballCourts.on("click", function (d) {
 /** INITIALIZATION */
 
 updateStreetClasses();
+select(ballCourts.nodes()[0]).dispatch("click");

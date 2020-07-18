@@ -11,24 +11,32 @@ body {
 }
 
 h1, h2, h3 {
-    margin: 0 8px;
+    margin: 0 16px;
     font-weight: normal;
     line-height: 30px;
 }
 
 #container {
-    display: block;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
 }
 
 #viz {
-    position: relative;
     width: 60%;
     display: inline-block;
 }
 
-#court-info {
-    margin-top: 16px;
+#controls {
+    width: 40%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
     text-align: right;
+}
+
+#controls>div {
+    flex-basis: auto;
 }
 
 .court-image>img {
@@ -37,7 +45,7 @@ h1, h2, h3 {
 }
 
 .court-notes>p {
-    margin: 8px;
+    margin: 8px 16px;
 }
 
 .intersect-streets {
@@ -61,6 +69,7 @@ h1, h2, h3 {
 }
 
 #street-classes {
+    margin: 0 16px;
     text-align: right;
 }
 
@@ -84,22 +93,6 @@ h1, h2, h3 {
     bottom: 4px;
 }
 
-#controls {
-    width: 40%;
-    float: right;
-    display: inline-block;
-}
-
-#controls>h1 {
-    font-size: 40px;
-    margin-top: 16px;
-    text-align: right;
-}
-
-#controls>div {
-    position: absolute;
-    bottom: 0%;
-}
 
 circle.ball_court {
     r: 6px;
