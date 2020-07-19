@@ -24,7 +24,7 @@ h1, h2, h3 {
 
 #viz {
     width: 60%;
-    display: inline-block;
+    display: block;
 }
 
 #controls {
@@ -36,7 +36,43 @@ h1, h2, h3 {
 }
 
 #controls>div {
-    flex-basis: auto;
+    border-top: 1px solid #aaa;
+}
+
+#street-classes {
+    display: flex;
+    flex: 1 auto;
+    margin: 0 16px;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.street-class-button {
+    flex: 4 auto;
+    outline: 0.5px solid #eee;
+    text-align: center;
+    cursor: pointer;
+    color: #eee;
+    margin: .25em;
+    padding: .5em;
+}
+
+#park-types {
+    display: flex;
+    flex: 1 auto;
+    margin: 0 16px;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.park-type-button {
+    flex: 4 auto;
+    outline: 0.5px solid #eee;
+    text-align: center;
+    cursor: pointer;
+    color: #eee;
+    margin: .25em;
+    padding: .5em;
 }
 
 .court-image>img {
@@ -54,32 +90,6 @@ h1, h2, h3 {
     text-decoration: underline dotted #eee;
 }
 
-.street {
-    stroke-opacity: 0.0;
-    stroke: #eee;
-}
-
-.street.shown {
-    stroke-opacity: 0.7;
-}
-
-.street.highlighted {
-    stroke-opacity: 1.0;
-}
-
-#street-classes {
-    margin: 0 16px;
-    text-align: right;
-}
-
-.street-class-button {
-    display: inline-block;
-    outline: 0.5px solid #eee;
-    cursor: pointer;
-    color: #eee;
-    margin: .25em;
-    padding: .5em;
-}
 
 .street-class-button.shown {
     background-color: #444;
@@ -92,6 +102,20 @@ h1, h2, h3 {
     bottom: 4px;
 }
 
+/*  SVG ELEMENT STYLES */
+
+.street {
+    stroke-opacity: 0.0;
+    stroke: #eee;
+}
+
+.street.shown {
+    stroke-opacity: 0.7;
+}
+
+.street.highlighted {
+    stroke-opacity: 1.0;
+}
 
 circle.ball_court {
     r: 6px;

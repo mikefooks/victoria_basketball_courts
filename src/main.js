@@ -41,7 +41,7 @@ const parks = viz.selectAll("path.park")
       .attr("d", pathGenerator)
       .attr("stroke-width", 0)
       .attr("fill", function (d) {
-          if (d.properties.ParkClassC == "BE") {
+          if (d.properties.park_type == "Beach") {
               return "#bdad84";
           } else {
               return "#84bd84";
@@ -65,8 +65,8 @@ const water = viz.selectAll("path.water")
       .append("path")
       .attr("class", "water")
       .attr("d", pathGenerator)
-      .attr("stroke-width", 1)
-      .attr("stroke", "#333")
+      .attr("stroke-width", 0)
+      // .attr("stroke", "#333")
       .attr("fill", "#8497bd");
 
 const ballCourts = viz.selectAll("circle.bball_court")
@@ -81,11 +81,12 @@ const ballCourts = viz.selectAll("circle.bball_court")
           return projection(d.geometry.coordinates)[1];
       });
 
-const controls = select("#street-classes");
+const streetClassControls = select("#street-classes");
+const parkTypeControls = select("#park-types");
 const courtInfoDisplay  = select("#court-info");
 const streetNameDisplay = select("#streetname-display");
 
-const classButtons = controls.selectAll("div.street-class-button")
+const streetClassButtons = streetClassControls.selectAll("div.street-class-button")
       .data([
           "Local",
           "Downtown Core",
@@ -103,6 +104,17 @@ const classButtons = controls.selectAll("div.street-class-button")
       })
       .text(function (d) { return d; });
 
+const parkTypeButtons = parkTypeControls.selectAll("div.park-type-button")
+      .data([
+          "City Park",
+          "Neighbourhood Park",
+          "Cemetary"
+      ])
+      .enter()
+      .append("div")
+      .attr("class", "park-type-button")
+      .text(function (d) { return d; });
+
 /** FEEDBACK */
 
 function updateStreetClasses () {
@@ -110,9 +122,13 @@ function updateStreetClasses () {
     streets.classed("shown", function (d) {
         return _contains(classes, d.properties.Class) ? true : false;
     });
-    classButtons.classed("shown", function (d) {
+    streetClassButtons.classed("shown", function (d) {
         return _contains(classes, d) ? true : false;
     });
+}
+
+function updateParkTypes () {
+    
 }
 
 function highlightStreet (streetNames) {
@@ -132,13 +148,10 @@ function updateCourtInfoDisplay (info) {
     const intersectStreets = info.intersect.split(",");
 
     const tmpl = `<div class='court-name'>
-                      <h2>${ info.name }</h1></td>
+                      <h2>${ info.name }</h2>
                   </div>
                   <div class='intersect-streets'>
-                      <h3>${ intersectStreets.join(" @ ") }</h2>
-                  </div>
-                  <div class='court-notes'>
-                      <p>${ info.notes }</p>
+                      <h3>${ intersectStreets.join(" @ ") }</h3>
                   </div>
                   <div class='court-image'>
                       <img src=${ imgSrc }>
@@ -163,7 +176,7 @@ streets.on("mouseover", function (d) {
     highlightStreet([d.properties.StreetName]);
 });
 
-classButtons.on("click", function (d) {
+streetClassButtons.on("click", function (d) {
     store.dispatch(toggleClass(d));
     updateStreetClasses();
 });
