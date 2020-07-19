@@ -1,14 +1,44 @@
 import { geoMercator, geoPath } from "d3-geo";
 import { select, selectAll } from "d3-selection";
-import * as topojson from "topojson-client";
+import { feature } from "topojson-client";
 
 import basemapData from "./basemap.json";
-import { store, toggleClass } from "./state.js";
 
+
+/* TOOLS & UTILITIES */
 
 function _contains (lst, val) {
     return lst.findIndex(x => x == val) >= 0;
 }
+
+/* given an array of dom elements,
+   return those with a particular class. */
+function _filterByClass (els, className) {
+    return els.filter(function (b) {
+        return b.classList.contains(className);
+    });
+}
+
+/* if val in arr, remove val from arr.
+   if val not in arr, add val to arr.
+   returns a new arr */
+function _unionOrDiff (arr, val) {
+    let newArr = [];
+    let containsFlag = false;
+    arr.forEach(function (v) {
+        if (v == val) {
+            containsFlag = true;
+        } else {
+            newArr.push(v); 
+        }
+    });
+    if (!containsFlag) {
+        newArr.push(val);
+    }
+    return newArr;
+}
+
+/* SETUP & INITIAL RENDERING */
 
 const windowHeight = window.innerHeight;
 const windowWidth = window.innerWidth;
@@ -16,10 +46,10 @@ const windowWidth = window.innerWidth;
 const container = document.querySelector("#container");
 container.style.height = windowHeight + "px";
 
-const streetData = topojson.feature(basemapData, "streets");
-const waterData = topojson.feature(basemapData, "water");
-const parksData = topojson.feature(basemapData, "parks");
-const ballData = topojson.feature(basemapData, "bball");
+const streetData = feature(basemapData, "streets");
+const waterData = feature(basemapData, "water");
+const parksData = feature(basemapData, "parks");
+const ballData = feature(basemapData, "bball");
 
 const viz = select("#viz")
       .append("svg")
@@ -38,15 +68,7 @@ const parks = viz.selectAll("path.park")
       .enter()
       .append("path")
       .attr("class", "park")
-      .attr("d", pathGenerator)
-      .attr("stroke-width", 0)
-      .attr("fill", function (d) {
-          if (d.properties.park_type == "Beach") {
-              return "#bdad84";
-          } else {
-              return "#84bd84";
-          }
-      });
+      .attr("d", pathGenerator);
 
 const streets = viz.selectAll("path.street")
       .data(streetData.features)
@@ -86,7 +108,8 @@ const parkTypeControls = select("#park-types");
 const courtInfoDisplay  = select("#court-info");
 const streetNameDisplay = select("#streetname-display");
 
-const streetClassButtons = streetClassControls.selectAll("div.street-class-button")
+const streetClassButtons = streetClassControls
+      .selectAll("div.street-class-button")
       .data([
           "Local",
           "Downtown Core",
@@ -98,13 +121,10 @@ const streetClassButtons = streetClassControls.selectAll("div.street-class-butto
       .enter()
       .append("div")
       .attr("class", "street-class-button")
-      .classed("shown", function (d) {
-          let shownClasses = store.getState().get("showClasses");
-          return _contains(shownClasses, d) ? true : false;
-      })
       .text(function (d) { return d; });
 
-const parkTypeButtons = parkTypeControls.selectAll("div.park-type-button")
+const parkTypeButtons = parkTypeControls
+      .selectAll("div.park-type-button")
       .data([
           "City Park",
           "Neighbourhood Park",
@@ -115,20 +135,25 @@ const parkTypeButtons = parkTypeControls.selectAll("div.park-type-button")
       .attr("class", "park-type-button")
       .text(function (d) { return d; });
 
-/** FEEDBACK */
 
-function updateStreetClasses () {
-    let classes = store.getState().get("showClasses");
+/** ACTIONS */
+
+function updateStreetClasses (shownClasses) {
     streets.classed("shown", function (d) {
-        return _contains(classes, d.properties.Class) ? true : false;
+        return _contains(shownClasses, d.properties.Class) ? true : false;
     });
     streetClassButtons.classed("shown", function (d) {
-        return _contains(classes, d) ? true : false;
+        return _contains(shownClasses, d) ? true : false;
     });
 }
 
-function updateParkTypes () {
-    
+function updateParkTypes (shownTypes) {
+    parks.classed("shown", function (d) {
+        return _contains(shownTypes, d.properties.park_type) ? true : false;
+    });
+    parkTypeButtons.classed("shown", function (d) {
+        return _contains(shownTypes, d) ? true : false;
+    });
 }
 
 function highlightStreet (streetNames) {
@@ -169,6 +194,7 @@ function updateCourtInfoDisplay (info) {
        });
 }
 
+
 /** EVENT BINDINGS */
 
 streets.on("mouseover", function (d) {
@@ -176,9 +202,22 @@ streets.on("mouseover", function (d) {
     highlightStreet([d.properties.StreetName]);
 });
 
-streetClassButtons.on("click", function (d) {
-    store.dispatch(toggleClass(d));
-    updateStreetClasses();
+streetClassButtons.on("click", function (d, _, els) {
+    const shownClasses = _filterByClass(els, "shown").map(function (b) {
+        return b.textContent;
+    });
+    const newShownClasses = _unionOrDiff(shownClasses, d);
+
+    updateStreetClasses(newShownClasses);
+});
+
+parkTypeButtons.on("click", function (d, _, els) {
+    const shownTypes = _filterByClass(els, "shown").map(function (b) {
+        return b.textContent;
+    });
+    const newShownTypes = _unionOrDiff(shownTypes, d);
+
+    updateParkTypes(newShownTypes);
 });
 
 ballCourts.on("mouseover", function (d) {
@@ -192,7 +231,15 @@ ballCourts.on("click", function (d) {
     updateCourtInfoDisplay(d.properties);
 });
 
+
 /** INITIALIZATION */
 
-updateStreetClasses();
+const shownStreetClasses = [ "Downtown Core",
+                             "Collector",
+                             "Secondary Collector" ];
+updateStreetClasses(shownStreetClasses);
+
+const shownParkTypes = [ "City Park" ];
+updateParkTypes(shownParkTypes);
+
 select(ballCourts.nodes()[0]).dispatch("click");

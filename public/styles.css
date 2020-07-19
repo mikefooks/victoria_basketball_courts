@@ -57,6 +57,10 @@ h1, h2, h3 {
     padding: .5em;
 }
 
+.street-class-button.shown {
+    background-color: #444;
+}
+
 #park-types {
     display: flex;
     flex: 1 auto;
@@ -75,6 +79,10 @@ h1, h2, h3 {
     padding: .5em;
 }
 
+.park-type-button.shown {
+    background-color: #464;
+}
+
 .court-image>img {
     width: 100%;
     display: block;
@@ -88,11 +96,6 @@ h1, h2, h3 {
     display: inline;
     cursor: pointer;
     text-decoration: underline dotted #eee;
-}
-
-
-.street-class-button.shown {
-    background-color: #444;
 }
 
 #streetname-display {
@@ -115,6 +118,16 @@ h1, h2, h3 {
 
 .street.highlighted {
     stroke-opacity: 1.0;
+}
+
+.park {
+    fill-opacity: 0.0;
+    stroke-width: 0;
+    fill: #84bd84;
+}
+
+.park.shown {
+    fill-opacity: 1.0;
 }
 
 circle.ball_court {
