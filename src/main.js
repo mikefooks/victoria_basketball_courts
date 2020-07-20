@@ -173,10 +173,10 @@ function updateCourtInfoDisplay (info) {
     const intersectStreets = info.intersect.split(",");
 
     const tmpl = `<div class='court-name'>
-                      <h2>${ info.name }</h2>
+                      <h1>${ info.name }</h1>
                   </div>
                   <div class='intersect-streets'>
-                      <h3>${ intersectStreets.join(" @ ") }</h3>
+                      <h2>${ intersectStreets.join(" @ ") }</h2>
                   </div>
                   <div class='court-image'>
                       <img src=${ imgSrc }>

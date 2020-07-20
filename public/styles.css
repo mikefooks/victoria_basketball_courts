@@ -10,8 +10,12 @@ body {
     color: #eee;
 }
 
+h1 {
+    font-size: 32px;
+}
+
 h1, h2, h3 {
-    margin: 0 16px;
+    margin: 0px 16px;
     font-weight: normal;
     line-height: 30px;
 }
@@ -36,13 +40,20 @@ h1, h2, h3 {
 }
 
 #controls>div {
-    border-top: 1px solid #aaa;
+    padding-top: 8px;
+}
+
+#display-buttons {
+    display: flex;
+    flex: inherit;
+    flex-flow: row nowrap;
+    justify-content: space-around;
 }
 
 #street-classes {
     display: flex;
-    flex: 1 auto;
-    margin: 0 16px;
+    flex: 4 auto;
+    margin: 0;
     flex-flow: row wrap;
     justify-content: space-evenly;
 }
@@ -57,6 +68,10 @@ h1, h2, h3 {
     padding: .5em;
 }
 
+.street-class-button:hover {
+    text-shadow: 1px 1px 2px #eee;
+}
+
 .street-class-button.shown {
     background-color: #444;
 }
@@ -64,7 +79,6 @@ h1, h2, h3 {
 #park-types {
     display: flex;
     flex: 1 auto;
-    margin: 0 16px;
     flex-flow: row wrap;
     justify-content: space-evenly;
 }
@@ -79,6 +93,10 @@ h1, h2, h3 {
     padding: .5em;
 }
 
+.park-type-button:hover {
+    text-shadow: 1px 1px 2px #eee;
+}
+
 .park-type-button.shown {
     background-color: #464;
 }
@@ -86,10 +104,6 @@ h1, h2, h3 {
 .court-image>img {
     width: 100%;
     display: block;
-}
-
-.court-notes>p {
-    margin: 8px 16px;
 }
 
 .intersect-streets {
@@ -139,6 +153,7 @@ circle.ball_court {
 
 circle.ball_court.active {
     r: 8px;
+    stroke: #eee;
 }
 
 circle.ball_court:hover {
