@@ -22,21 +22,35 @@ h1, h2, h3 {
 
 #container {
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: column nowrap;
     align-items: stretch;
 }
 
 #viz {
-    width: 60%;
+    width: 100%;
     display: block;
 }
 
 #controls {
-    width: 40%;
+    width: 100%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
     text-align: right;
+}
+
+@media screen and (min-width: 540px) {
+    #container {
+        flex-flow: row nowrap;
+    }
+
+    #viz {
+        width: 60%;
+    }
+
+    #controls {
+        width: 40%;
+    }
 }
 
 #controls>div {

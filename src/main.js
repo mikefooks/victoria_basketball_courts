@@ -43,6 +43,10 @@ function _unionOrDiff (arr, val) {
 const windowHeight = window.innerHeight;
 const windowWidth = window.innerWidth;
 
+const isMobile = window.matchMedia("screen and (max-width: 540px)").matches;
+
+console.log("mobile mode: " + isMobile);
+
 const container = document.querySelector("#container");
 container.style.height = windowHeight + "px";
 
@@ -53,12 +57,16 @@ const ballData = feature(basemapData, "bball");
 
 const viz = select("#viz")
       .append("svg")
-      .attr("height", "100%")
-      .attr("width", "100%");
+      .attr("height", isMobile ? windowWidth + "px" : "100%")
+      .attr("width", isMobile ? windowWidth + "px" : "100%");
+
+const projectionDims = isMobile ?
+      [ windowWidth, windowWidth] :
+      [ windowWidth * .6, windowHeight];
 
 const projection = geoMercator()
-      .fitExtent([[0, 0], [windowWidth * .60, windowHeight]],
-                 streetData);
+      .fitExtent([[0, 0], projectionDims],
+                  streetData);
 
 const pathGenerator = geoPath()
       .projection(projection);
