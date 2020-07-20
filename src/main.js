@@ -202,6 +202,11 @@ streets.on("mouseover", function (d) {
     highlightStreet([d.properties.StreetName]);
 });
 
+parks.on("mouseover", function (d) {
+    updateStreetNameDisplay(d.properties.Park_Name);
+    highlightStreet([]);
+});
+
 streetClassButtons.on("click", function (d, _, els) {
     const shownClasses = _filterByClass(els, "shown").map(function (b) {
         return b.textContent;
@@ -222,7 +227,7 @@ parkTypeButtons.on("click", function (d, _, els) {
 
 ballCourts.on("mouseover", function (d) {
     streets.classed("highlighted", false);
-    streetNameDisplay.empty();
+    streetNameDisplay.text(d.properties.name);
 });
 
 ballCourts.on("click", function (d) {
@@ -231,12 +236,21 @@ ballCourts.on("click", function (d) {
     updateCourtInfoDisplay(d.properties);
 });
 
+window.addEventListener("resize", function (e) {
+    const height = window.innerHeight;
+    const width = window.innerWidth;
+
+    container.style.height = windowHeight + "px";
+    projection.fitExtent([[0, 0], [windowWidth * .60, windowHeight]],
+                         streetData);
+});
+
 
 /** INITIALIZATION */
 
 const shownStreetClasses = [ "Downtown Core",
-                             "Collector",
-                             "Secondary Collector" ];
+                             "Arterial",
+                             "Secondary Arterial" ];
 updateStreetClasses(shownStreetClasses);
 
 const shownParkTypes = [ "City Park" ];

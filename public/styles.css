@@ -144,6 +144,11 @@ h1, h2, h3 {
     fill-opacity: 1.0;
 }
 
+.park:hover {
+    stroke-width: 1px;
+    stroke: #eee;
+}
+
 circle.ball_court {
     r: 6px;
     fill: #ebaf1a;
