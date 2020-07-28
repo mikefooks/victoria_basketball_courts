@@ -99,10 +99,10 @@ const water = viz.selectAll("path.water")
       // .attr("stroke", "#333")
       .attr("fill", "#8497bd");
 
-const ballCourts = viz.selectAll("circle.bball_court")
+const ballCourts = viz.selectAll("ellipse.bball_court")
       .data(ballData.features)
       .enter()
-      .append("circle")
+      .append("ellipse")
       .attr("class", "ball_court")
       .attr("cx", function (d) {
           return projection(d.geometry.coordinates)[0];

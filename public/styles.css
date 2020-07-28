@@ -163,18 +163,21 @@ h1, h2, h3 {
     stroke: #eee;
 }
 
-circle.ball_court {
-    r: 6px;
+ellipse.ball_court {
+    rx: 6px;
+    ry: 6px;
     fill: #ebaf1a;
     stroke-width: 1px;
     stroke: #333;
 }
 
-circle.ball_court.active {
-    r: 8px;
+ellipse.ball_court.active {
+    rx: 8px;
+    ry: 8px;
     stroke: #eee;
 }
 
-circle.ball_court:hover {
-    r: 10px;
+ellipse.ball_court:hover {
+    rx: 10px;
+    ry: 10px;
 }
