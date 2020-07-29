@@ -74,7 +74,7 @@ h1, h2, h3 {
 
 .street-class-button {
     flex: 4 auto;
-    outline: 0.5px solid #eee;
+    outline: 0.5px solid #444;
     text-align: center;
     cursor: pointer;
     color: #eee;
@@ -99,7 +99,7 @@ h1, h2, h3 {
 
 .park-type-button {
     flex: 4 auto;
-    outline: 0.5px solid #eee;
+    outline: 0.5px solid #444;
     text-align: center;
     cursor: pointer;
     color: #eee;
@@ -163,21 +163,18 @@ h1, h2, h3 {
     stroke: #eee;
 }
 
-ellipse.ball_court {
-    rx: 6px;
-    ry: 6px;
+circle.ball_court {
+    r: 6px;
     fill: #ebaf1a;
     stroke-width: 1px;
     stroke: #333;
 }
 
-ellipse.ball_court.active {
-    rx: 8px;
-    ry: 8px;
+circle.ball_court.active {
+    r: 8px;
     stroke: #eee;
 }
 
-ellipse.ball_court:hover {
-    rx: 10px;
-    ry: 10px;
+circle.ball_court:hover {
+    r: 10px;
 }
